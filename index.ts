@@ -4,32 +4,56 @@ class ObjectWrapper {
   /***
    * 引数のオブジェクトのコピーを this._objに設定
    */
-  constructor(_obj: Object) {}
+  constructor(_obj: { [key: string]: string }) {
+    this._obj = _obj;
+  }
 
   /**
    * this._objのコピーを返却
    * @return Object
    */
-  get obj() {}
+  get obj() {
+    return this._obj;
+  }
 
   /**
    * this._obj[key] に valを設定。keyがthis._objに存在しない場合、falseを返却
    * @param key オブジェクトのキー
    * @param val オブジェクトの値
    */
-  set(key, val): boolean {}
+  set(key: string, val: string): boolean {
+    if (this._obj[key] !== undefined) {
+      this._obj[key] = val;
+      return true;
+    }
+    return false;
+  }
 
   /**
    * 指定したキーの値のコピーを返却
    * 指定のキーが存在しない場合 undefinedを返却
    * @param key オブジェクトのキー
    */
-  get(key) {}
+  get(key: string) {
+    if (this._obj[key] !== undefined) {
+      return this._obj[key];
+    }
+    return undefined;
+  }
 
   /**
    * 指定した値を持つkeyの配列を返却。該当のものがなければ空の配列を返却。
    */
-  findKeys(val: unknown) {}
+  findKeys(val: string) {
+    /* Object.entries()メソッドを使えるようにするために、tsconfig.jsonのtargetを「"es2017"」にしています */
+    const result: string[] = [];
+    for (let [key, value] of Object.entries(this._obj)) {
+      if (value === val) {
+        result.push(key);
+      }
+    }
+    return result;
+  }
 }
 
 /**
