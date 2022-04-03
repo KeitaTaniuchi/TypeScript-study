@@ -1,5 +1,8 @@
-class ObjectWrapper<T> {
-  private _obj;
+import * as R from 'ramda';
+const { identity } = R;
+
+class ObjectWrapper<T extends object> {
+  private _obj: T;
 
   /***
    * 引数のオブジェクトのコピーを this._objに設定
@@ -40,13 +43,8 @@ class ObjectWrapper<T> {
    * 指定した値を持つkeyの配列を返却。該当のものがなければ空の配列を返却。
    */
   findKeys(val: T[keyof T]): (keyof T)[] {
-    const resultKeyArr: (keyof T)[] = [];
-    for (let key in this._obj) {
-      if (this._obj[key] === val) {
-        resultKeyArr.push(key);
-      }
-    }
-    return resultKeyArr;
+    const filteredObj = R.filter((n: any) => n === val, this._obj);
+    return R.keys(filteredObj);
   }
 }
 
